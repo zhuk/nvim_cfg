@@ -1,6 +1,18 @@
 # NeoVim config.
 
-NeoVim built-in LSP support, from https://github.com/awesome-streamers/awesome-streamerrc.
+My NeoVim settings with built-in LSP support.
+
+## features
+Built-in LSP support.
+floaterm
+fzf
+telescope
+...
+
+Reference:
+https://github.com/awesome-streamers/awesome-streamerrc
+https://github.com/theniceboy/nvim
+https://github.com/ChristianChiarulli/nvim
 
 ## LSP server install.
 Refer to https://github.com/neovim/nvim-lspconfig

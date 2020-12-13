@@ -1,3 +1,23 @@
+" __  ____   __  _   ___     _____ __  __ ____   ____
+"|  \/  \ \ / / | \ | \ \   / /_ _|  \/  |  _ \ / ___|
+"| |\/| |\ V /  |  \| |\ \ / / | || |\/| | |_) | |
+"| |  | | | |   | |\  | \ V /  | || |  | |  _ <| |___
+"|_|  |_| |_|   |_| \_|  \_/  |___|_|  |_|_| \_\\____|
+
+" Author: @zhuknir
+
+" ===
+" === Auto load for first time uses
+" ===
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" ===
+" === Basic settings
+" ===
 syntax on
 filetype plugin indent on
 
@@ -22,7 +42,6 @@ set incsearch
 set termguicolors
 set scrolloff=8
 set noshowmode
-set completeopt=menuone,noinsert,noselect
 set signcolumn=yes
 
 " Give more space for displaying messages.
@@ -32,10 +51,18 @@ set cmdheight=2
 " delays and poor user experience.
 set updatetime=50
 
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
 set colorcolumn=80
+
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 
 call plug#begin('~/.config/nvim/autoload/plugged')
 
@@ -96,9 +123,19 @@ Plug 'nvim-lua/telescope.nvim'
 " Terminal
 Plug 'voldikss/vim-floaterm'
 
+" Track the engine.
+Plug 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
+" Status line
+Plug 'theniceboy/eleline.vim'
+Plug 'ojroques/vim-scrollstatus'
+
 "  I AM SO SORRY FOR DOING COLOR SCHEMES IN MY VIMRC, BUT I HAVE
 "  TOOOOOOOOOOOOO
-
+Plug 'theniceboy/nvim-deus'
 Plug 'colepeters/spacemacs-theme.vim'
 Plug 'sainnhe/gruvbox-material'
 Plug 'phanviet/vim-monokai-pro'
@@ -118,7 +155,8 @@ call plug#end()
 
 let g:theprimeagen_colorscheme = "gruvbox"
 fun! ColorMyPencils()
-    colorscheme ayu
+    " colorscheme ayu
+    colorscheme deus
     set background=dark
 
     let g:gruvbox_contrast_dark = 'hard'
@@ -213,6 +251,12 @@ lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_att
 lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
+
+"map <c-p> to manually trigger completion
+imap <silent> <c-p> <Plug>(completion_trigger)
+
+" possible value: 'UltiSnips', 'Neosnippet', 'vim-vsnip', 'snippets.nvim'
+let g:completion_enable_snippet = 'UltiSnips'
 
 fun! ThePrimeagen_LspHighlighter()
     lua print("Testing")
