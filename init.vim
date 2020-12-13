@@ -133,6 +133,9 @@ Plug 'honza/vim-snippets'
 Plug 'theniceboy/eleline.vim'
 Plug 'ojroques/vim-scrollstatus'
 
+" color scheme
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
+
 "  I AM SO SORRY FOR DOING COLOR SCHEMES IN MY VIMRC, BUT I HAVE
 "  TOOOOOOOOOOOOO
 Plug 'theniceboy/nvim-deus'
@@ -153,7 +156,7 @@ call plug#end()
 
 " let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
 
-let g:theprimeagen_colorscheme = "gruvbox"
+" let g:theprimeagen_colorscheme = "gruvbox"
 fun! ColorMyPencils()
     " colorscheme ayu
     colorscheme deus
@@ -174,9 +177,33 @@ fun! ColorMyPencils()
     highlight netrwDir guifg=#5eacd3
     highlight qfFileName guifg=#aed75f
 endfun
-call ColorMyPencils()
+" call ColorMyPencils()
 
-lua require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
+
+" lua require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
+"
+" configure treesitter
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = { "c", "rust" },  -- list of language that will be disabled
+  },
+}
+EOF
+
+" configure nvcode-color-schemes
+let g:nvcode_termcolors=256
+
+colorscheme nvcode " Or whatever colorscheme you make
+
+" checks if your terminal has 24-bit color support
+if (has("termguicolors"))
+    set termguicolors
+    hi LineNr ctermbg=NONE guibg=NONE
+endif
+
 
 let g:vim_be_good_log_file = 1
 let g:vim_apm_log = 1
