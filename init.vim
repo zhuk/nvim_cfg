@@ -2,9 +2,9 @@ syntax on
 filetype plugin indent on
 
 set exrc
-set guicursor=
+" set guicursor=
 set relativenumber
-set nohlsearch
+set hlsearch
 set hidden
 set noerrorbells
 set tabstop=4 softtabstop=4
@@ -37,27 +37,27 @@ set shortmess+=c
 
 set colorcolumn=80
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/autoload/plugged')
 
-let g:firenvim_config = {
-    \ 'globalSettings': {
-        \ 'alt': 'all',
-    \  },
-    \ 'localSettings': {
-        \ '.*': {
-            \ 'cmdline': 'neovim',
-            \ 'priority': 0,
-            \ 'selector': 'textarea',
-            \ 'takeover': 'always',
-        \ },
-    \ }
-\ }
-let fc = g:firenvim_config['localSettings']
-let fc['https://studio.youtube.com.*'] = { 'takeover': 'never', 'priority': 1 }
-let fc['https?://instagram.com.*'] = { 'takeover': 'never', 'priority': 1 }
-let fc['https?://twitter.com.*'] = { 'takeover': 'never', 'priority': 1 }
-let fc['https://.*gmail.com.*'] = { 'takeover': 'never', 'priority': 1 }
-let fc['https?://.*twitch.tv.*'] = { 'takeover': 'never', 'priority': 1 }
+" let g:firenvim_config = {
+"     \ 'globalSettings': {
+"         \ 'alt': 'all',
+"     \  },
+"     \ 'localSettings': {
+"         \ '.*': {
+"             \ 'cmdline': 'neovim',
+"             \ 'priority': 0,
+"             \ 'selector': 'textarea',
+"             \ 'takeover': 'always',
+"         \ },
+"     \ }
+" \ }
+" let fc = g:firenvim_config['localSettings']
+" let fc['https://studio.youtube.com.*'] = { 'takeover': 'never', 'priority': 1 }
+" let fc['https?://instagram.com.*'] = { 'takeover': 'never', 'priority': 1 }
+" let fc['https?://twitter.com.*'] = { 'takeover': 'never', 'priority': 1 }
+" let fc['https://.*gmail.com.*'] = { 'takeover': 'never', 'priority': 1 }
+" let fc['https?://.*twitch.tv.*'] = { 'takeover': 'never', 'priority': 1 }
 
 " Neovim lsp Plugins
 Plug 'neovim/nvim-lspconfig'
@@ -104,10 +104,10 @@ Plug 'chriskempson/base16-vim'
 " Plug '/home/mpaulson/personal/VimDeathmatch/client'
 
 " HARPOON!!
-Plug '/home/mpaulson/personal/harpoon'
+" Plug '/home/mpaulson/personal/harpoon'
 
 " Fire Nvim
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(69) } }
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(69) } }
 
 call plug#end()
 
@@ -221,24 +221,31 @@ nnoremap <leader>ga :Git fetch --all<CR>
 nnoremap <leader>grum :Git rebase upstream/master<CR>
 nnoremap <leader>grom :Git rebase origin/master<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
+
 nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
-nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
 nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
+
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
+
 nnoremap <leader>u :UndotreeShow<CR>
-nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
+nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
+nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
 nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
 nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
-nnoremap <Leader><CR> :so ~/.config/nvim/init.vim<CR>
+
+nnoremap <Leader><CR> :so $MYVIMRC<CR>
+
+nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
 nnoremap <Leader>rp :resize 100<CR>
+
 nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -269,7 +276,9 @@ lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
-" lua require'nvim_lsp'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
 
 nmap <leader>gh :diffget //3<CR>
 nmap <leader>gu :diffget //2<CR>
@@ -323,8 +332,8 @@ augroup THE_PRIMEAGEN
     autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
 
     " Fire Neovim
-    au BufEnter github.com_*.txt set filetype=markdown
-    au BufEnter txti.es_*.txt set filetype=typescript
-    au BufEnter stackoverflow_*.txt filetype=markdown
+    " au BufEnter github.com_*.txt set filetype=markdown
+    " au BufEnter txti.es_*.txt set filetype=typescript
+    " au BufEnter stackoverflow_*.txt filetype=markdown
 augroup END
 
