@@ -173,8 +173,17 @@ let g:fzf_branch_actions = {
       \ },
       \}
 
+" telescope
 lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
+nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
+nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
+nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
+nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
+nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
+nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
+
+" LSP mappings
 nnoremap <leader>va :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
@@ -185,6 +194,27 @@ nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
 nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.show_line_diagnostics()<CR>
 
+" LSP settings
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
+
+fun! ThePrimeagen_LspHighlighter()
+    lua print("Testing")
+    lua package.loaded["my_lspconfig"] = nil
+    lua require("my_lspconfig")
+endfun
+
+com! SetLspVirtualText call ThePrimeagen_LspHighlighter()
+
+" vimspector settings
+"
 fun! GotoWindow(id)
     call win_gotoid(a:id)
     MaximizerToggle
@@ -216,6 +246,8 @@ nmap <leader>dcbp <Plug>VimspectorToggleConditionalBreakpoint
 " <Plug>VimspectorStop
 " <Plug>VimspectorPause
 " <Plug>VimspectorAddFunctionBreakpoint
+
+" git mappings
 nnoremap <leader>gc :GBranches<CR>
 nnoremap <leader>ga :Git fetch --all<CR>
 nnoremap <leader>grum :Git rebase upstream/master<CR>
@@ -231,13 +263,6 @@ nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 
 nnoremap <leader>u :UndotreeShow<CR>
-
-nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
-nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
-nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
-nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
-nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
 nnoremap <Leader><CR> :so $MYVIMRC<CR>
 
@@ -270,15 +295,6 @@ nnoremap <leader>vwm :call ColorMyPencils()<CR>
 
 inoremap <C-c> <esc>
 
-let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
 
 nmap <leader>gh :diffget //3<CR>
 nmap <leader>gu :diffget //2<CR>
@@ -299,11 +315,6 @@ endfun
 " ES
 com! W w
 
-fun! ThePrimeagen_LspHighlighter()
-    lua print("Testing")
-    lua package.loaded["my_lspconfig"] = nil
-    lua require("my_lspconfig")
-endfun
 
 " Terminal commands
 " ueoa is first through fourth finger left hand home row.
@@ -318,7 +329,6 @@ nmap <leader>nn :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '>
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
-com! SetLspVirtualText call ThePrimeagen_LspHighlighter()
 
 augroup highlight_yank
     autocmd!
