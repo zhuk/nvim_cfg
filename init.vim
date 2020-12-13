@@ -93,6 +93,9 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-lua/telescope.nvim'
 
+" Terminal
+Plug 'voldikss/vim-floaterm'
+
 "  I AM SO SORRY FOR DOING COLOR SCHEMES IN MY VIMRC, BUT I HAVE
 "  TOOOOOOOOOOOOO
 
@@ -172,6 +175,12 @@ let g:fzf_branch_actions = {
       \   'confirm': v:false,
       \ },
       \}
+
+" float termal
+let g:floaterm_keymap_new    = '<F7>'
+let g:floaterm_keymap_prev   = '<F8>'
+let g:floaterm_keymap_next   = '<F9>'
+let g:floaterm_keymap_toggle = '<F12>'
 
 " telescope
 lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
