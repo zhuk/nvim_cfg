@@ -4,7 +4,7 @@
 "| |  | | | |   | |\  | \ V /  | || |  | |  _ <| |___
 "|_|  |_| |_|   |_| \_|  \_/  |___|_|  |_|_| \_\\____|
 
-" Author: @zhuknir
+" Author: @zhuk
 
 " ===
 " === Auto load for first time uses
@@ -39,10 +39,14 @@ set nobackup
 set undodir=~/.vim/undodir
 set undofile
 set incsearch
+set ignorecase
 set termguicolors
 set scrolloff=8
 set noshowmode
 set signcolumn=yes
+
+" set leader to space key
+let mapleader = " "
 
 " Give more space for displaying messages.
 set cmdheight=2
@@ -63,9 +67,12 @@ set colorcolumn=80
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-
+" ==========
+" install plugins
+" ==========
 call plug#begin('~/.config/nvim/autoload/plugged')
 
+" Fire Nvim
 " let g:firenvim_config = {
 "     \ 'globalSettings': {
 "         \ 'alt': 'all',
@@ -85,6 +92,8 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 " let fc['https?://twitter.com.*'] = { 'takeover': 'never', 'priority': 1 }
 " let fc['https://.*gmail.com.*'] = { 'takeover': 'never', 'priority': 1 }
 " let fc['https?://.*twitch.tv.*'] = { 'takeover': 'never', 'priority': 1 }
+"
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(69) } }
 
 " Neovim lsp Plugins
 Plug 'neovim/nvim-lspconfig'
@@ -96,24 +105,39 @@ Plug 'tjdevries/lsp_extensions.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
+" Autoformat
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+
 " Debugger Plugins
 Plug 'puremourning/vimspector'
 Plug 'szw/vim-maximizer'
 
+" languages
 Plug 'rust-lang/rust.vim'
 Plug 'tweekmonster/gofmt.vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+
+" git
 Plug 'tpope/vim-fugitive'
-Plug 'vim-utils/vim-man'
+Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
+Plug 'fszymanski/fzf-gitignore', { 'do': ':UpdateRemotePlugins' }
+Plug 'airblade/vim-gitgutter'
+Plug 'cohama/agit.vim'
+
+" Plug 'vim-utils/vim-man'
 Plug 'mbbill/undotree'
+
+" fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
+
+" manage todos
 Plug 'vuciv/vim-bujo'
+
 Plug 'tpope/vim-dispatch'
-Plug 'theprimeagen/vim-be-good'
-Plug 'gruvbox-community/gruvbox'
-Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'tpope/vim-projectionist'
+" Plug 'tpope/vim-projectionist'
 
 " telescope requirements...
 Plug 'nvim-lua/popup.nvim'
@@ -135,54 +159,19 @@ Plug 'ojroques/vim-scrollstatus'
 
 " color scheme
 Plug 'christianchiarulli/nvcode-color-schemes.vim'
-
-"  I AM SO SORRY FOR DOING COLOR SCHEMES IN MY VIMRC, BUT I HAVE
-"  TOOOOOOOOOOOOO
-Plug 'theniceboy/nvim-deus'
-Plug 'colepeters/spacemacs-theme.vim'
-Plug 'sainnhe/gruvbox-material'
-Plug 'phanviet/vim-monokai-pro'
-Plug 'flazz/vim-colorschemes'
-Plug 'chriskempson/base16-vim'
-" Plug '/home/mpaulson/personal/VimDeathmatch/client'
-
-" HARPOON!!
-" Plug '/home/mpaulson/personal/harpoon'
-
-" Fire Nvim
-" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(69) } }
+" Plug 'gruvbox-community/gruvbox'
+" Plug 'theniceboy/nvim-deus'
+" Plug 'colepeters/spacemacs-theme.vim'
+" Plug 'sainnhe/gruvbox-material'
+" Plug 'phanviet/vim-monokai-pro'
+" Plug 'flazz/vim-colorschemes'
+" Plug 'chriskempson/base16-vim'
 
 call plug#end()
 
-" let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
-
-" let g:theprimeagen_colorscheme = "gruvbox"
-fun! ColorMyPencils()
-    " colorscheme ayu
-    colorscheme deus
-    set background=dark
-
-    let g:gruvbox_contrast_dark = 'hard'
-    if exists('+termguicolors')
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-    endif
-    let g:gruvbox_invert_selection='0'
-
-    highlight ColorColumn ctermbg=0 guibg=grey
-    highlight Normal guibg=none
-    " highlight LineNr guifg=#ff8659
-    " highlight LineNr guifg=#aed75f
-    highlight LineNr guifg=#5eacd3
-    highlight netrwDir guifg=#5eacd3
-    highlight qfFileName guifg=#aed75f
-endfun
-" call ColorMyPencils()
-
-
-" lua require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
-"
+" ==========
 " configure treesitter
+" ==========
 lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
@@ -204,16 +193,14 @@ if (has("termguicolors"))
     hi LineNr ctermbg=NONE guibg=NONE
 endif
 
-
-let g:vim_be_good_log_file = 1
-let g:vim_apm_log = 1
+" let g:vim_be_good_log_file = 1
+" let g:vim_apm_log = 1
 
 if executable('rg')
     let g:rg_derive_root='true'
 endif
 
 let loaded_matchparen = 1
-let mapleader = " "
 
 let g:netrw_browse_split = 2
 let g:netrw_banner = 0
@@ -256,8 +243,11 @@ nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
 nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
 nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
+" ==========
+" LSP
+" ==========
 
-" LSP mappings
+" lsp mappings
 nnoremap <leader>va :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
@@ -268,7 +258,7 @@ nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
 nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.show_line_diagnostics()<CR>
 
-" LSP settings
+" lsp config
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
@@ -293,8 +283,17 @@ endfun
 
 com! SetLspVirtualText call ThePrimeagen_LspHighlighter()
 
+augroup auto_lsp_ext
+    autocmd!
+    autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
+augroup END
+
+" ==========
 " vimspector settings
-"
+" ==========
+
+" let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
+
 fun! GotoWindow(id)
     call win_gotoid(a:id)
     MaximizerToggle
@@ -327,58 +326,107 @@ nmap <leader>dcbp <Plug>VimspectorToggleConditionalBreakpoint
 " <Plug>VimspectorPause
 " <Plug>VimspectorAddFunctionBreakpoint
 
+" ===
+" === AutoFormat
+" ===
+augroup autoformat_settings
+  " autocmd FileType bzl AutoFormatBuffer buildifier
+  " autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
+  " autocmd FileType dart AutoFormatBuffer dartfmt
+  " autocmd FileType go AutoFormatBuffer gofmt
+  " autocmd FileType gn AutoFormatBuffer gn
+  " autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  " autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+  " autocmd FileType rust AutoFormatBuffer rustfmt
+  " autocmd FileType vue AutoFormatBuffer prettier
+augroup END
+
+" ===
+" === eleline.vim
+" ===
+let g:airline_powerline_fonts = 1
+
+"
+" ==========
 " git mappings
+" ==========
 nnoremap <leader>gc :GBranches<CR>
 nnoremap <leader>ga :Git fetch --all<CR>
 nnoremap <leader>grum :Git rebase upstream/master<CR>
 nnoremap <leader>grom :Git rebase origin/master<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
 
-nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
+" git gutter
+let g:gitgutter_sign_allow_clobber = 0
+let g:gitgutter_map_keys = 0
+let g:gitgutter_override_sign_column_highlight = 0
+let g:gitgutter_preview_win_floating = 1
+let g:gitgutter_sign_added = '▎'
+let g:gitgutter_sign_modified = '░'
+let g:gitgutter_sign_removed = '▏'
+let g:gitgutter_sign_removed_first_line = '▔'
+let g:gitgutter_sign_modified_removed = '▒'
+nnoremap <LEADER>gf :GitGutterFold<CR>
+nnoremap H :GitGutterPreviewHunk<CR>
+nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
+nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 
+" ==========
+" window management
+" ==========
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 
-nnoremap <leader>u :UndotreeShow<CR>
-
-nnoremap <Leader><CR> :so $MYVIMRC<CR>
-
-nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
 nnoremap <Leader>rp :resize 100<CR>
 
-nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+
+" ==========
+" manage TODO
+" ==========
+nmap <Leader>tu <Plug>BujoChecknormal
+nmap <Leader>th <Plug>BujoAddnormal
+let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
+
+" =========
+" misc
+" =========
+inoremap <C-c> <esc>
+nnoremap <Leader><CR> :so $MYVIMRC<CR>
+
+" nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
 
 " greatest remap ever
 vnoremap <leader>p "_dP
+
+" undo tree
+nnoremap <leader>u :UndotreeShow<CR>
+
+" move code block up and down in visual mode
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 " next greatest remap ever : asbjornHaland
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y gg"+yG
 
-" vim TODO
-nmap <Leader>tu <Plug>BujoChecknormal
-nmap <Leader>th <Plug>BujoAddnormal
-let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
-
-nnoremap <Leader>ww ofunction wait(ms: number): Promise<void> {<CR>return new Promise(res => setTimeout(res, ms));<CR>}<esc>k=i{<CR>
-
-" Vim with me
-nnoremap <leader>vwm :call ColorMyPencils()<CR>
-
-inoremap <C-c> <esc>
-
-
+" diff
 nmap <leader>gh :diffget //3<CR>
 nmap <leader>gu :diffget //2<CR>
 nmap <leader>gs :G<CR>
+
+" insert code blocks
+nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
+nnoremap <Leader>ww ofunction wait(ms: number): Promise<void> {<CR>return new Promise(res => setTimeout(res, ms));<CR>}<esc>k=i{<CR>
+
 fun! EmptyRegisters()
     let regs=split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/-"', '\zs')
     for r in regs
@@ -392,35 +440,18 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 
-" ES
-com! W w
-
-
-" Terminal commands
-" ueoa is first through fourth finger left hand home row.
-" This just means I can crush, with opposite hand, the 4 terminal positions
-"
-" These functions are stored in harpoon.  A plugn that I am developing
-nmap <leader>tu :call GotoBuffer(0)<CR>
-nmap <leader>te :call GotoBuffer(1)<CR>
-nmap <leader>to :call GotoBuffer(2)<CR>
-nmap <leader>ta :call GotoBuffer(3)<CR>
-nmap <leader>nn :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
+augroup auto_trim_spaces
+    autocmd!
+    autocmd BufWritePre * :call TrimWhitespace()
+augroup END
 
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
 augroup END
 
-augroup THE_PRIMEAGEN
+augroup auto_fire_nvim
     autocmd!
-    autocmd BufWritePre * :call TrimWhitespace()
-    " autocmd VimEnter * :VimApm
-    autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
-
     " Fire Neovim
     " au BufEnter github.com_*.txt set filetype=markdown
     " au BufEnter txti.es_*.txt set filetype=typescript
