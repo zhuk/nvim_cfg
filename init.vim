@@ -33,13 +33,13 @@ set expandtab
 set smartindent
 set nu
 set nowrap
-set smartcase
 set noswapfile
 set nobackup
 set undodir=~/.vim/undodir
 set undofile
 set incsearch
 set ignorecase
+set smartcase
 set termguicolors
 set scrolloff=8
 set noshowmode
@@ -108,6 +108,13 @@ Plug 'nvim-treesitter/playground'
 " Autoformat
 Plug 'google/vim-maktaba'
 Plug 'google/vim-codefmt'
+
+" comment
+Plug 'tpope/vim-commentary'
+
+" File explorer
+Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
+" Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Debugger Plugins
 Plug 'puremourning/vimspector'
@@ -400,6 +407,13 @@ let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
 inoremap <C-c> <esc>
 nnoremap <Leader><CR> :so $MYVIMRC<CR>
 
+" quit insert mode
+inoremap jk <esc>
+inoremap kj <esc>
+
+" file explorer
+nnoremap <leader>v <cmd>CHADopen<cr>
+
 " nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
 
@@ -424,8 +438,8 @@ nmap <leader>gu :diffget //2<CR>
 nmap <leader>gs :G<CR>
 
 " insert code blocks
-nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
-nnoremap <Leader>ww ofunction wait(ms: number): Promise<void> {<CR>return new Promise(res => setTimeout(res, ms));<CR>}<esc>k=i{<CR>
+" nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
+" nnoremap <Leader>ww ofunction wait(ms: number): Promise<void> {<CR>return new Promise(res => setTimeout(res, ms));<CR>}<esc>k=i{<CR>
 
 fun! EmptyRegisters()
     let regs=split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/-"', '\zs')
