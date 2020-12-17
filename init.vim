@@ -23,6 +23,7 @@ filetype plugin indent on
 
 set exrc
 " set guicursor=
+set cursorline
 set relativenumber
 set hlsearch
 set hidden
@@ -165,9 +166,11 @@ Plug 'theniceboy/eleline.vim'
 Plug 'ojroques/vim-scrollstatus'
 
 " color scheme
-Plug 'christianchiarulli/nvcode-color-schemes.vim'
-" Plug 'gruvbox-community/gruvbox'
-" Plug 'theniceboy/nvim-deus'
+" Plug 'christianchiarulli/nvcode-color-schemes.vim'
+Plug 'gruvbox-community/gruvbox'
+Plug 'theniceboy/nvim-deus'
+" Plug 'altercation/vim-colors-solarized'
+Plug 'NLKNguyen/papercolor-theme'
 " Plug 'colepeters/spacemacs-theme.vim'
 " Plug 'sainnhe/gruvbox-material'
 " Plug 'phanviet/vim-monokai-pro'
@@ -189,10 +192,22 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
-" configure nvcode-color-schemes
-let g:nvcode_termcolors=256
+set t_Co=256   " This is may or may not needed.
 
-colorscheme nvcode " Or whatever colorscheme you make
+" configure nvcode-color-schemes
+" let g:nvcode_termcolors=256
+" colorscheme nvcode
+
+set background=dark
+colorscheme PaperColor
+" colorscheme gruvbox
+" colorscheme deus
+
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
+let &t_SI = "\<esc>[5 q"
+let &t_SR = "\<esc>[5 q"
+let &t_EI = "\<esc>[2 q"
 
 " checks if your terminal has 24-bit color support
 if (has("termguicolors"))
@@ -207,12 +222,7 @@ if executable('rg')
     let g:rg_derive_root='true'
 endif
 
-let loaded_matchparen = 1
-
-let g:netrw_browse_split = 2
-let g:netrw_banner = 0
-let g:netrw_winsize = 25
-let g:netrw_localrmdir='rm -r'
+" let loaded_matchparen = 1
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let $FZF_DEFAULT_OPTS='--reverse'
@@ -388,11 +398,22 @@ nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 
-nnoremap <Leader>+ :vertical resize +5<CR>
-nnoremap <Leader>- :vertical resize -5<CR>
+nnoremap <leader>o :wincmd o<CR>    " only the current window
+nnoremap <leader>c :wincmd c<CR>    " close the current window
+nnoremap <leader>v :wincmd v<CR>    " vertical split window
+nnoremap <leader>s :wincmd s<CR>    " split window horizontal
+
+" nnoremap <Leader>+ :vertical resize +5<CR>
+" nnoremap <Leader>- :vertical resize -5<CR>
 nnoremap <Leader>rp :resize 100<CR>
 
-nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+" Resize splits with arrow keys
+noremap <up> :res +5<CR>
+noremap <down> :res -5<CR>
+noremap <left> :vertical resize-5<CR>
+noremap <right> :vertical resize+5<CR>
+
+" nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 
 " ==========
 " manage TODO
@@ -412,7 +433,14 @@ inoremap jk <esc>
 inoremap kj <esc>
 
 " file explorer
-nnoremap <leader>v <cmd>CHADopen<cr>
+nnoremap <leader>e <cmd>CHADopen<cr>
+
+" default file explorer
+let g:netrw_browse_split = 2    " open files in a new vertical split
+let g:netrw_banner = 0
+let g:netrw_winsize = 25
+let g:netrw_localrmdir='rm -r'
+let g:netrw_liststyle = 3
 
 " nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
