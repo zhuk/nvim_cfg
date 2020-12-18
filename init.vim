@@ -45,6 +45,9 @@ set termguicolors
 set scrolloff=8
 set noshowmode
 set signcolumn=yes
+set ttyfast "should make scrolling faster
+set lazyredraw "same as above
+set visualbell
 
 " set leader to space key
 let mapleader = " "
@@ -192,22 +195,37 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
+
 set t_Co=256   " This is may or may not needed.
 
 " configure nvcode-color-schemes
 " let g:nvcode_termcolors=256
 " colorscheme nvcode
 
-set background=dark
-colorscheme PaperColor
-" colorscheme gruvbox
+set background=light
+" colorscheme PaperColor
+colorscheme gruvbox
 " colorscheme deus
+" highlight Cursor gui=reverse guifg=black guibg=white
+" set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+" 		  \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+" 		  \,sm:block-blinkwait175-blinkoff150-blinkon175
+" hi CursorLine     guifg=none            guibg=#002943
+hi Cursor         guifg=Green           guibg=#A7A7A7
+" hi iCursor       guifg=red           guibg=#002947"#5F5A60
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+set gcr+=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
+" set gcr=n-v:block-Cursor/lCursor,c:block-iCursor/lCursor,ve:ver35-Cursor,
+"             \o:hor50-Cursor,i-ci:ver25-iCursor/lCursor,r-cr:hor20-iCursor/lCursor,
+"             \sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+"   		    \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
 
-let &t_SI = "\<esc>[5 q"
-let &t_SR = "\<esc>[5 q"
-let &t_EI = "\<esc>[2 q"
+
+" let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
+" let &t_SI = "\<esc>[5 q"
+" let &t_SR = "\<esc>[5 q"
+" let &t_EI = "\<esc>[2 q"
 
 " checks if your terminal has 24-bit color support
 if (has("termguicolors"))
@@ -445,15 +463,15 @@ let g:netrw_liststyle = 3
 " nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
 
-" greatest remap ever
-vnoremap <leader>p "_dP
-
 " undo tree
 nnoremap <leader>u :UndotreeShow<CR>
 
 " move code block up and down in visual mode
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+" greatest remap ever
+vnoremap <leader>p "_dP
 
 " next greatest remap ever : asbjornHaland
 nnoremap <leader>y "+y
