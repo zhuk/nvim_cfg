@@ -74,7 +74,7 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " ==========
 " install plugins
 " ==========
-call plug#begin('~/.config/nvim/autoload/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " Fire Nvim
 " let g:firenvim_config = {
@@ -104,6 +104,8 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'tjdevries/nlua.nvim'
 Plug 'tjdevries/lsp_extensions.nvim'
+
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Neovim Tree shitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -178,7 +180,7 @@ Plug 'NLKNguyen/papercolor-theme'
 " Plug 'sainnhe/gruvbox-material'
 " Plug 'phanviet/vim-monokai-pro'
 " Plug 'flazz/vim-colorschemes'
-" Plug 'chriskempson/base16-vim'
+Plug 'chriskempson/base16-vim'
 
 call plug#end()
 
@@ -190,9 +192,10 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,              -- false will disable the whole extension
-    disable = { "c", "rust" },  -- list of language that will be disabled
+    disable = { "c" },  -- list of language that will be disabled
   },
 }
+
 EOF
 
 
@@ -202,7 +205,7 @@ set t_Co=256   " This is may or may not needed.
 " let g:nvcode_termcolors=256
 " colorscheme nvcode
 
-set background=light
+set background=dark
 " colorscheme PaperColor
 colorscheme gruvbox
 " colorscheme deus
@@ -211,8 +214,8 @@ colorscheme gruvbox
 " 		  \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
 " 		  \,sm:block-blinkwait175-blinkoff150-blinkon175
 " hi CursorLine     guifg=none            guibg=#002943
-hi Cursor         guifg=Green           guibg=#A7A7A7
-" hi iCursor       guifg=red           guibg=#002947"#5F5A60
+" hi Cursor         guifg=none           guibg=#A7A7A7
+hi iCursor       guifg=none           guibg=green
 
 set gcr+=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
 " set gcr=n-v:block-Cursor/lCursor,c:block-iCursor/lCursor,ve:ver35-Cursor,
@@ -296,13 +299,31 @@ nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.sho
 " lsp config
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
+
+" lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
+
+lua << EOF
+local util = require 'lspconfig/util'
+require'lspconfig'.jdtls.setup{
+  on_attach=require'completion'.on_attach;
+--  log_level = vim.lsp.protocol.MessageType.Debug;
+  root_dir = util.root_pattern('.git');
+  init_options = {
+    workspace = util.path.join { vim.loop.os_homedir(), "workspace" };
+    jvm_args = {'-javaagent:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar',
+                '-Xbootclasspath/a:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar'};
+    os_config = nil;
+  };
+}
+EOF
+
+" lua vim.lsp.set_log_level("debug")
 
 "map <c-p> to manually trigger completion
 imap <silent> <c-p> <Plug>(completion_trigger)
@@ -322,6 +343,7 @@ augroup auto_lsp_ext
     autocmd!
     autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
 augroup END
+
 
 " ==========
 " vimspector settings
@@ -445,6 +467,9 @@ let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
 " =========
 inoremap <C-c> <esc>
 nnoremap <Leader><CR> :so $MYVIMRC<CR>
+
+" space space to switch buffer
+nnoremap <Leader><Space> <C-^>
 
 " quit insert mode
 inoremap jk <esc>
