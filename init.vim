@@ -98,14 +98,124 @@ call plug#begin('~/.config/nvim/plugged')
 " let fc['https?://.*twitch.tv.*'] = { 'takeover': 'never', 'priority': 1 }
 "
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(69) } }
+"
+" ===
+ " === coc.nvim
+ " ===
+let g:coc_global_extensions = [
+\ 'coc-css',
+\ 'coc-diagnostic',
+\ 'coc-explorer',
+\ 'coc-flutter-tools',
+\ 'coc-gitignore',
+\ 'coc-html',
+\ 'coc-json',
+\ 'coc-lists',
+\ 'coc-prettier',
+\ 'coc-pyright',
+\ 'coc-python',
+\ 'coc-snippets',
+\ 'coc-sourcekit',
+\ 'coc-stylelint',
+\ 'coc-syntax',
+\ 'coc-tasks',
+\ 'coc-translator',
+\ 'coc-tslint-plugin',
+\ 'coc-tsserver',
+\ 'coc-vetur',
+\ 'coc-vimlsp',
+\ 'coc-java',
+\ 'coc-java-debug',
+\ 'coc-rust-analyzer',
+\ 'coc-yaml',
+\ 'coc-yank']
+
+inoremap <silent><expr> <TAB>
+   \ pumvisible() ?  "\<C-n>" :
+   \ <SID>check_back_space() ?  "\<TAB>" :
+   \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ?  "\<C-p>" : \<C-h>"
+inoremap <expr> <cr> complete_info()["selected"] != -1" ?  \<C-y>" : \<C-g>u\<CR>"
+
+function!  s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-o> coc#refresh()
+function!  Show_documentation()
+call CocActionAsync('highlight')
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
+
+nnoremap <LEADER>h :call Show_documentation()<CR>
+
+" set runtimepath^=~/.config/nvim/coc-extensions/coc-flutter-tools/
+" let g:coc_node_args = ['--nolazy', '--inspect-brk=6045']
+" let $NVIM_COC_LOG_LEVEL = 'debug'
+" let $NVIM_COC_LOG_FILE = '/Users/david/Desktop/log.txt'
+
+nnoremap <silent><nowait> <LEADER>d :CocList diagnostics<cr>
+nmap <silent> <LEADER>- <Plug>(coc-diagnostic-prev)
+nmap <silent> <LEADER>= <Plug>(coc-diagnostic-next)
+nnoremap <c-c> :CocCommand<CR>
+
+" Text Objects
+xmap kf <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap kf <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+xmap kc <Plug>(coc-classobj-i)
+omap kc <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Useful commands
+nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr>
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+nmap tt :CocCommand explorer<CR>
+" coc-translator
+nmap ts <Plug>(coc-translator-p)
+" Remap for do codeAction of selected region
+function!  s:cocActionsOpenFromSelected(type) abort
+     execute 'CocCommand actions.open ' .  a:type
+ endfunction
+
+ xmap <leader>a <Plug>(coc-codeaction-selected)
+ nmap <leader>aw <Plug>(coc-codeaction-selected)w
+
+ " coctodolist
+ " nnoremap <leader>tn :CocCommand todolist.create<CR>
+ " nnoremap <leader>tl :CocList todolist<CR>
+ " nnoremap <leader>tu :CocCommand todolist.download<CR>:CocCommand todolist.upload<CR>
+ " coc-tasks
+ noremap <silent> <leader>ts :CocList tasks<CR>
+ " coc-snippets
+ imap <C-l> <Plug>(coc-snippets-expand)
+ vmap <C-e> <Plug>(coc-snippets-select)
+ let g:coc_snippet_next = '<c-e>'
+ let g:coc_snippet_prev = '<c-n>'
+ imap <C-e> <Plug>(coc-snippets-expand-jump)
+ let g:snips_author = 'David Chen'
+ autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
+
 
 " Neovim lsp Plugins
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
-Plug 'tjdevries/nlua.nvim'
-Plug 'tjdevries/lsp_extensions.nvim'
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'nvim-lua/completion-nvim'
+" Plug 'tjdevries/nlua.nvim'
+" Plug 'tjdevries/lsp_extensions.nvim'
 
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Neovim Tree shitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -119,7 +229,7 @@ Plug 'google/vim-codefmt'
 Plug 'tpope/vim-commentary'
 
 " File explorer
-Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
+" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
 " Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Debugger Plugins
@@ -133,7 +243,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 
 " git
 Plug 'tpope/vim-fugitive'
-Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
+" Plug 'theniceboy/vim-gitignore', { 'for': ['gitignore', 'vim-plug'] }
 Plug 'fszymanski/fzf-gitignore', { 'do': ':UpdateRemotePlugins' }
 Plug 'airblade/vim-gitgutter'
 Plug 'cohama/agit.vim'
@@ -286,63 +396,63 @@ nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 " ==========
 
 " lsp mappings
-nnoremap <leader>va :lua vim.lsp.buf.definition()<CR>
-nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
-nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
-nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
-nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
-nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
-nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
-nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
-nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.show_line_diagnostics()<CR>
+" nnoremap <leader>va :lua vim.lsp.buf.definition()<CR>
+" nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
+" nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
+" nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
+" nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
+" nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
+" nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
+" nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.show_line_diagnostics()<CR>
 
 " lsp config
-let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
-" lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
-" lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
-lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
+" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+" lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
+" " lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
+" " lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
+" " lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
+" lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
 
-" lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
+" " lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
 
-lua << EOF
-local util = require 'lspconfig/util'
-require'lspconfig'.jdtls.setup{
-  on_attach=require'completion'.on_attach;
---  log_level = vim.lsp.protocol.MessageType.Debug;
-  root_dir = util.root_pattern('.git');
-  init_options = {
-    workspace = util.path.join { vim.loop.os_homedir(), "workspace" };
-    jvm_args = {'-javaagent:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar',
-                '-Xbootclasspath/a:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar'};
-    os_config = nil;
-  };
-}
-EOF
+" lua << EOF
+" local util = require 'lspconfig/util'
+" require'lspconfig'.jdtls.setup{
+"   on_attach=require'completion'.on_attach;
+" --  log_level = vim.lsp.protocol.MessageType.Debug;
+"   root_dir = util.root_pattern('.git');
+"   init_options = {
+"     workspace = util.path.join { vim.loop.os_homedir(), "workspace" };
+"     jvm_args = {'-javaagent:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar',
+"                 '-Xbootclasspath/a:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar'};
+"     os_config = nil;
+"   };
+" }
+" EOF
 
 " lua vim.lsp.set_log_level("debug")
 
 "map <c-p> to manually trigger completion
-imap <silent> <c-p> <Plug>(completion_trigger)
+" imap <silent> <c-p> <Plug>(completion_trigger)
 
 " possible value: 'UltiSnips', 'Neosnippet', 'vim-vsnip', 'snippets.nvim'
-let g:completion_enable_snippet = 'UltiSnips'
+" let g:completion_enable_snippet = 'UltiSnips'
 
-fun! ThePrimeagen_LspHighlighter()
-    lua print("Testing")
-    lua package.loaded["my_lspconfig"] = nil
-    lua require("my_lspconfig")
-endfun
+" fun! ThePrimeagen_LspHighlighter()
+"     lua print("Testing")
+"     lua package.loaded["my_lspconfig"] = nil
+"     lua require("my_lspconfig")
+" endfun
 
-com! SetLspVirtualText call ThePrimeagen_LspHighlighter()
+" com! SetLspVirtualText call ThePrimeagen_LspHighlighter()
 
-augroup auto_lsp_ext
-    autocmd!
-    autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
-augroup END
+" augroup auto_lsp_ext
+"     autocmd!
+"     autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
+" augroup END
 
 
 " ==========
@@ -497,7 +607,7 @@ inoremap jk <esc>
 inoremap kj <esc>
 
 " file explorer
-nnoremap <leader>e <cmd>CHADopen<cr>
+" nnoremap <leader>e <cmd>CHADopen<cr>
 
 " default file explorer
 let g:netrw_browse_split = 2    " open files in a new vertical split
