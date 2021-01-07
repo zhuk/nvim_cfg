@@ -148,6 +148,11 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
 
+Plug 'airblade/vim-rooter'
+
+" Taglist
+Plug 'liuchengxu/vista.vim'
+
 " manage todos
 Plug 'vuciv/vim-bujo'
 
@@ -571,6 +576,35 @@ augroup autoformat_settings
   " autocmd FileType rust AutoFormatBuffer rustfmt
   " autocmd FileType vue AutoFormatBuffer prettier
 augroup END
+
+" ===
+" === vim-rooter
+" ===
+let g:rooter_patterns = ['__vim_project_root', '.git/']
+let g:rooter_silent_chdir = 1
+
+
+" ===
+" === Vista.vim
+" ===
+noremap <LEADER>vt :Vista!!<CR>
+noremap <c-t> :silent! Vista finder coc<CR>
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'coc'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+" function! NearestMethodOrFunction() abort
+" 	return get(b:, 'vista_nearest_method_or_function', '')
+" endfunction
+" set statusline+=%{NearestMethodOrFunction()}
+" autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+let g:scrollstatus_size = 15
+
 
 " ===
 " === eleline.vim
