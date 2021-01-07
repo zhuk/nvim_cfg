@@ -27,7 +27,7 @@
   "java.referencesCodeLens.enabled": true,
   "java.implementationsCodeLens.enabled": true,
   "java.completion.enabled": true,
-  "java.jdt.ls.vmargs": "-javaagent:~/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar",
+  "java.jdt.ls.vmargs": "-javaagent:/usr/local/lib/lombok.jar",
 
   // list
   "list.indicator": ">",
