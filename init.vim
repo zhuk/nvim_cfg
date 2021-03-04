@@ -285,7 +285,8 @@ nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim
 nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
 nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
 nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
-nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
+" nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
+nnoremap <Leader>pg :lua require('telescope.builtin').git_files()<CR>
 nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
 " ===
@@ -654,10 +655,10 @@ nnoremap <leader>s :wincmd s<CR>    " split window horizontal
 nnoremap <Leader>rp :resize 100<CR>
 
 " Resize splits with arrow keys
-noremap <up> :res +5<CR>
-noremap <down> :res -5<CR>
-noremap <left> :vertical resize-5<CR>
-noremap <right> :vertical resize+5<CR>
+noremap <Leader><up> :res +5<CR>
+noremap <Leader><down> :res -5<CR>
+noremap <Leader><left> :vertical resize-5<CR>
+noremap <Leader><right> :vertical resize+5<CR>
 
 " nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 
