@@ -147,6 +147,8 @@ Plug 'mbbill/undotree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+Plug 'kevinhwang91/rnvimr'
 
 Plug 'airblade/vim-rooter'
 
@@ -272,6 +274,43 @@ let g:fzf_branch_actions = {
       \   'confirm': v:false,
       \ },
       \}
+
+" ===
+" === FZF
+" ===
+set rtp+=/usr/local/opt/fzf
+nnoremap <leader>p :Leaderf file<CR>
+" noremap <silent> <C-p> :Files<CR>
+noremap <leader>fs :Rg<CR>
+noremap <leader>fh :History<CR>
+"noremap <C-t> :BTags<CR>
+" noremap <silent> <C-l> :Lines<CR>
+noremap <silent> <C-w> :Buffers<CR>
+"noremap <leader>; :History:<CR>
+
+let g:fzf_preview_window = 'right:60%'
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
+
+
+" ===
+" === Leaderf
+" ===
+" let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_PreviewCode = 1
+let g:Lf_ShowHidden = 1
+let g:Lf_ShowDevIcons = 1
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+let g:Lf_WildIgnore = {
+        \ 'dir': ['.git', 'vendor', 'node_modules'],
+        \ 'file': ['__vim_project_root']
+        \}
+let g:Lf_UseMemoryCache = 0
+let g:Lf_UseCache = 0
+
 
 " float termal
 let g:floaterm_keymap_new    = '<F7>'
@@ -730,6 +769,12 @@ vnoremap <leader>p "_dP
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y gg"+yG
+
+" Open a new instance of st with the cwd
+nnoremap \t :tabe<CR>:-tabmove<CR>:term sh -c 'st'<CR><C-\><C-N>:q<CR>
+
+" Opening a terminal window
+noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
 
 " diff
 nmap <leader>gh :diffget //3<CR>
