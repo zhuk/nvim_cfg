@@ -281,18 +281,17 @@ let g:fzf_branch_actions = {
 set rtp+=/usr/local/opt/fzf
 nnoremap <leader>p :Leaderf file<CR>
 " noremap <silent> <C-p> :Files<CR>
-noremap <leader>fs :Rg<CR>
-noremap <leader>fh :History<CR>
-"noremap <C-t> :BTags<CR>
+" noremap <leader>fs :Rg<CR>
+" noremap <leader>fh :History<CR>
+" noremap <C-t> :BTags<CR>
 " noremap <silent> <C-l> :Lines<CR>
-noremap <silent> <C-w> :Buffers<CR>
-"noremap <leader>; :History:<CR>
+" noremap <silent> <C-w> :Buffers<CR>
+" noremap <leader>; :History:<CR>
 
 let g:fzf_preview_window = 'right:60%'
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
-
 
 " ===
 " === Leaderf
@@ -311,22 +310,28 @@ let g:Lf_WildIgnore = {
 let g:Lf_UseMemoryCache = 0
 let g:Lf_UseCache = 0
 
+" telescope
+lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+nnoremap <leader>fl <cmd>lua require('telescope.builtin').git_commits()<cr>
+nnoremap <leader>ft <cmd>lua require('telescope.builtin').builtin()<cr>
+
+" nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
+" nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
+" nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
+" nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
+" nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
+" nnoremap <Leader>pg :lua require('telescope.builtin').git_files()<CR>
+" nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
 " float termal
 let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
 let g:floaterm_keymap_toggle = '<F12>'
-
-" telescope
-lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
-nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
-nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
-nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
-" nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
-nnoremap <Leader>pg :lua require('telescope.builtin').git_files()<CR>
-nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
 " ===
 " === coc.nvim
@@ -612,9 +617,9 @@ augroup autoformat_settings
   " autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
   autocmd FileType java AutoFormatBuffer google-java-format
   " autocmd FileType python AutoFormatBuffer yapf
-  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
-  " autocmd FileType rust AutoFormatBuffer rustfmt
-  " autocmd FileType vue AutoFormatBuffer prettier
+  autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType rust AutoFormatBuffer rustfmt
+  autocmd FileType vue AutoFormatBuffer prettier
 augroup END
 
 " ===
