@@ -15,45 +15,64 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" ===
+" ===============================================
 " === Basic settings
-" ===
+" ===============================================
+set iskeyword+=-                      	" treat dash separated words as a word text object"
+set formatoptions-=cro                  " Stop newline continution of comments
 syntax on
 filetype plugin indent on
 
 set exrc
 " set guicursor=
-set cursorline
+set number
 set relativenumber
 set hlsearch
+set incsearch
 set hidden
 set noerrorbells
 set tabstop=4 softtabstop=4
 set shiftwidth=4
 set expandtab
-set smartindent
-set nu
-set nowrap
 set noswapfile
-set nobackup
 set undodir=~/.vim/undodir
 set undofile
-set incsearch
 set ignorecase
 set smartcase
 set termguicolors
 set scrolloff=8
-set noshowmode
 set signcolumn=yes
 set ttyfast "should make scrolling faster
 set lazyredraw "same as above
 set visualbell
 
-" set leader to space key
-let mapleader = " "
-
-" Give more space for displaying messages.
-set cmdheight=2
+set nowrap                              " Display long lines as just one line
+set whichwrap+=<,>,[,],h,l
+set encoding=utf-8                      " The encoding displayed
+set fileencoding=utf-8                  " The encoding written to file
+set ruler              			            " Show the cursor position all the time
+set pumheight=10                        " Makes popup menu smaller
+set cmdheight=2                         " More space for displaying messages
+set mouse=a                             " Enable your mouse
+set splitbelow                          " Horizontal splits will automatically be below
+set splitright                          " Vertical splits will automatically be to the right
+set t_Co=256                            " Support 256 colors
+set conceallevel=0                      " So that I can see `` in markdown files
+set smarttab                            " Makes tabbing smarter will realize you have 2 vs 4
+set expandtab                           " Converts tabs to spaces
+set smartindent                         " Makes indenting smart
+set autoindent                          " Good auto indent
+set laststatus=2                        " Always display the status line
+set cursorline                          " Enable highlighting of the current line
+set showtabline=2                       " Always show tabs
+set noshowmode                          " We don't need to see things like -- INSERT -- anymore
+set nobackup                            " This is recommended by coc
+set nowritebackup                       " This is recommended by coc
+set shortmess+=c                        " Don't pass messages to |ins-completion-menu|.
+set signcolumn=yes                      " Always show the signcolumn, otherwise it would shift the text each time
+set updatetime=300                      " Faster completion
+"set timeoutlen=100                      " By default timeoutlen is 1000 ms
+set clipboard=unnamedplus               " Copy paste between vim and everything else
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -62,50 +81,149 @@ set updatetime=50
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noinsert,noselect
 
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
 set colorcolumn=80
 
+
+" ===============================================
+" Basic Key Mappings
+" ===============================================
+" g Leader key
+let mapleader=" "
+" let localleader=" "
+nnoremap <Space> <Nop>
+
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>l :wincmd l<CR>
+
+nnoremap <leader>o :wincmd o<CR>    " only the current window
+nnoremap <leader>c :wincmd c<CR>    " close the current window
+nnoremap <leader>v :wincmd v<CR>    " vertical split window
+nnoremap <leader>s :wincmd s<CR>    " split window horizontal
+
+imap <C-h> <C-w>h
+imap <C-j> <C-w>j
+imap <C-k> <C-w>k
+imap <C-l> <C-w>l
+
+" Better indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Better nav for omnicomplete
+inoremap <expr> <c-j> ("\<C-n>")
+inoremap <expr> <c-k> ("\<C-p>")
+
+" I hate escape more than anything else
+inoremap jk <Esc>
+inoremap kj <Esc>
+
+" Easy CAPS
+" inoremap <c-u> <ESC>viwUi
+" nnoremap <c-u> viwU<Esc>
+
+" TAB in general mode will move to text buffer
+nnoremap <silent> <TAB> :bnext<CR>
+" SHIFT-TAB will go back
+nnoremap <silent> <S-TAB> :bprevious<CR>
+
+" Move selected line / block of text in visual mode
+" shift + k to move up
+" shift + j to move down
+xnoremap K :move '<-2<CR>gv-gv
+xnoremap J :move '>+1<CR>gv-gv
+
+" Alternate way to save
+nnoremap <silent> <C-s> :w<CR>
+" Alternate way to quit
+nnoremap <silent> <C-Q> :wq!<CR>
+" Use control-c instead of escape
+nnoremap <silent> <C-c> <Esc>
+
 " Use <Tab> and <S-Tab> to navigate through popup menu
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <silent> <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" ==========
+" Better window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+" Terminal window navigation
+tnoremap <A-h> <C-\><C-N><C-w>h
+tnoremap <A-j> <C-\><C-N><C-w>j
+tnoremap <A-k> <C-\><C-N><C-w>k
+tnoremap <A-l> <C-\><C-N><C-w>l
+inoremap <A-h> <C-\><C-N><C-w>h
+inoremap <A-j> <C-\><C-N><C-w>j
+inoremap <A-k> <C-\><C-N><C-w>k
+inoremap <A-l> <C-\><C-N><C-w>l
+tnoremap <Esc> <C-\><C-n>
+
+" Use alt + hjkl to resize windows
+" nnoremap <silent> <M-j>    :resize -2<CR>
+" nnoremap <silent> <M-k>    :resize +2<CR>
+" nnoremap <silent> <M-h>    :vertical resize -2<CR>
+" nnoremap <silent> <M-l>    :vertical resize +2<CR>
+
+nnoremap <Leader>rp :resize 100<CR>
+
+" Resize splits with arrow keys
+noremap <Leader><up> :resize +5<CR>
+noremap <Leader><down> :resize -5<CR>
+noremap <Leader><left> :vertical resize-5<CR>
+noremap <Leader><right> :vertical resize+5<CR>
+
+nnoremap <silent> <C-Up>    :resize -2<CR>
+nnoremap <silent> <C-Down>  :resize +2<CR>
+nnoremap <silent> <C-Left>  :vertical resize -2<CR>
+nnoremap <silent> <C-Right> :vertical resize +2<CR>
+
+let g:elite_mode=0                      " Disable arrows"
+" Disable arrow movement, resize splits instead.
+if get(g:, 'elite_mode')
+  nnoremap <C-Up>    :resize -2<CR>
+  nnoremap <C-Down>  :resize +2<CR>
+  nnoremap <C-Left>  :vertical resize -2<CR>
+  nnoremap <C-Right> :vertical resize +2<CR>
+endif
+
+" Better nav for omnicomplete
+inoremap <expr> <c-j> ("\<C-n>")
+inoremap <expr> <c-k> ("\<C-p>")
+
+" reload vimrc
+nnoremap <Leader><CR> :so $MYVIMRC<CR>
+
+" space space to switch buffer
+nnoremap <Leader><Space> <C-^>
+
+" greatest remap ever
+" vnoremap <leader>p "_dP
+
+" next greatest remap ever : asbjornHaland
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
+
+" Open a new instance of st with the cwd
+nnoremap \t :tabe<CR>:-tabmove<CR>:term sh -c 'st'<CR><C-\><C-N>:q<CR>
+
+" Opening a terminal window
+noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
+
+
+" ===============================================
 " install plugins
-" ==========
-call plug#begin('~/.config/nvim/plugged')
+" ===============================================
+call plug#begin('~/.config/nvim/autoload/plugged')
 
-" Fire Nvim
-" let g:firenvim_config = {
-"     \ 'globalSettings': {
-"         \ 'alt': 'all',
-"     \  },
-"     \ 'localSettings': {
-"         \ '.*': {
-"             \ 'cmdline': 'neovim',
-"             \ 'priority': 0,
-"             \ 'selector': 'textarea',
-"             \ 'takeover': 'always',
-"         \ },
-"     \ }
-" \ }
-" let fc = g:firenvim_config['localSettings']
-" let fc['https://studio.youtube.com.*'] = { 'takeover': 'never', 'priority': 1 }
-" let fc['https?://instagram.com.*'] = { 'takeover': 'never', 'priority': 1 }
-" let fc['https?://twitter.com.*'] = { 'takeover': 'never', 'priority': 1 }
-" let fc['https://.*gmail.com.*'] = { 'takeover': 'never', 'priority': 1 }
-" let fc['https?://.*twitch.tv.*'] = { 'takeover': 'never', 'priority': 1 }
-"
-" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(69) } }
-"
-
-
-" Neovim lsp Plugins
-" Plug 'neovim/nvim-lspconfig'
-" Plug 'nvim-lua/completion-nvim'
-" Plug 'tjdevries/nlua.nvim'
-" Plug 'tjdevries/lsp_extensions.nvim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -119,10 +237,6 @@ Plug 'google/vim-codefmt'
 
 " comment
 Plug 'tpope/vim-commentary'
-
-" File explorer
-" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
-" Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Debugger Plugins
 Plug 'puremourning/vimspector'
@@ -143,7 +257,7 @@ Plug 'cohama/agit.vim'
 " Plug 'vim-utils/vim-man'
 Plug 'mbbill/undotree'
 
-" fzf
+" file explorer
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
@@ -180,22 +294,23 @@ Plug 'theniceboy/eleline.vim'
 Plug 'ojroques/vim-scrollstatus'
 
 " color scheme
-" Plug 'christianchiarulli/nvcode-color-schemes.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'theniceboy/nvim-deus'
+" Plug 'christianchiarulli/nvcode-color-schemes.vim'
 " Plug 'altercation/vim-colors-solarized'
-Plug 'NLKNguyen/papercolor-theme'
+" Plug 'NLKNguyen/papercolor-theme'
 " Plug 'colepeters/spacemacs-theme.vim'
 " Plug 'sainnhe/gruvbox-material'
 " Plug 'phanviet/vim-monokai-pro'
 " Plug 'flazz/vim-colorschemes'
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
 
 call plug#end()
 
-" ==========
+
+" ===============================================
 " configure treesitter
-" ==========
+" ===============================================
 lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
@@ -204,40 +319,28 @@ require'nvim-treesitter.configs'.setup {
     disable = { "c" },  -- list of language that will be disabled
   },
 }
+require "nvim-treesitter.configs".setup {
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+    persist_queries = false -- Whether the query persists across vim sessions
+  }
+}
 
 EOF
 
 
-set t_Co=256   " This is may or may not needed.
-
-" configure nvcode-color-schemes
-" let g:nvcode_termcolors=256
-" colorscheme nvcode
-
+" ===============================================
+" themes
+" ===============================================
 set background=dark
-" colorscheme PaperColor
 colorscheme gruvbox
-" colorscheme deus
-" highlight Cursor gui=reverse guifg=black guibg=white
-" set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-" 		  \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-" 		  \,sm:block-blinkwait175-blinkoff150-blinkon175
-" hi CursorLine     guifg=none            guibg=#002943
-" hi Cursor         guifg=none           guibg=#A7A7A7
+" colorscheme deus PaperColor
+
 hi iCursor       guifg=none           guibg=green
 
 set gcr+=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
-" set gcr=n-v:block-Cursor/lCursor,c:block-iCursor/lCursor,ve:ver35-Cursor,
-"             \o:hor50-Cursor,i-ci:ver25-iCursor/lCursor,r-cr:hor20-iCursor/lCursor,
-"             \sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-"   		    \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-
-
-" let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-
-" let &t_SI = "\<esc>[5 q"
-" let &t_SR = "\<esc>[5 q"
-" let &t_EI = "\<esc>[2 q"
 
 " checks if your terminal has 24-bit color support
 if (has("termguicolors"))
@@ -245,6 +348,87 @@ if (has("termguicolors"))
     hi LineNr ctermbg=NONE guibg=NONE
 endif
 
+" ===============================================
+" File manager, FZF, Leaderf
+" ===============================================
+
+" This is the default extra key bindings
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Enable per-command history.
+" CTRL-N and CTRL-P will be automatically bound to next-history and
+" previous-history instead of down and up. If you don't like the change,
+" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_buffers_jump = 1
+
+" map <C-f> :Files<CR>
+" map <leader>b :Buffers<CR>
+" nnoremap <leader>g :Rg<CR>
+" nnoremap <leader>t :Tags<CR>
+" nnoremap <leader>m :Marks<CR>
+
+let g:fzf_tags_command = 'ctags -R'
+" Border color
+let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.9, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
+
+let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
+let $FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/**'"
+"-g '!{node_modules,.git}'
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+"Get Files
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--inline-info']}), <bang>0)
+
+
+" Get text in files with Rg
+" command! -bang -nargs=* Rg
+"   \ call fzf#vim#grep(
+"   \   "rg --column --line-number --no-heading --color=always --smart-case --glob '!.git/**' ".shellescape(<q-args>), 1,
+
+ " Make Ripgrep ONLY search file contents and not filenames
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --hidden --smart-case --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e'}, 'right:50%', '?'),
+  \   <bang>0)
+
+" Ripgrep advanced
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+" Git grep
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number '.shellescape(<q-args>), 0,
+  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 " let g:vim_be_good_log_file = 1
 " let g:vim_apm_log = 1
 
@@ -254,8 +438,6 @@ endif
 
 " let loaded_matchparen = 1
 
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
-let $FZF_DEFAULT_OPTS='--reverse'
 let g:fzf_branch_actions = {
       \ 'rebase': {
       \   'prompt': 'Rebase> ',
@@ -275,11 +457,9 @@ let g:fzf_branch_actions = {
       \ },
       \}
 
-" ===
-" === FZF
-" ===
 set rtp+=/usr/local/opt/fzf
-nnoremap <leader>p :Leaderf file<CR>
+" nnoremap <leader>p :Leaderf file<CR>
+nnoremap <leader>p :Files<CR>
 " noremap <silent> <C-p> :Files<CR>
 " noremap <leader>fs :Rg<CR>
 " noremap <leader>fh :History<CR>
@@ -291,11 +471,8 @@ nnoremap <leader>p :Leaderf file<CR>
 let g:fzf_preview_window = 'right:60%'
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
-" ===
 " === Leaderf
-" ===
 " let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
 let g:Lf_PreviewCode = 1
@@ -310,7 +487,7 @@ let g:Lf_WildIgnore = {
 let g:Lf_UseMemoryCache = 0
 let g:Lf_UseCache = 0
 
-" telescope
+" === telescope
 lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
@@ -327,15 +504,15 @@ nnoremap <leader>ft <cmd>lua require('telescope.builtin').builtin()<cr>
 " nnoremap <Leader>pg :lua require('telescope.builtin').git_files()<CR>
 " nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
-" float termal
+" === float termal
 let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
 let g:floaterm_keymap_toggle = '<F12>'
 
-" ===
+" ===============================================
 " === coc.nvim
-" ===
+" ===============================================
 let g:coc_global_extensions = [
 \ 'coc-css',
 \ 'coc-diagnostic',
@@ -680,51 +857,6 @@ nnoremap H :GitGutterPreviewHunk<CR>
 nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
 nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 
-" ==========
-" window management
-" ==========
-nnoremap <leader>h :wincmd h<CR>
-nnoremap <leader>j :wincmd j<CR>
-nnoremap <leader>k :wincmd k<CR>
-nnoremap <leader>l :wincmd l<CR>
-
-nnoremap <leader>o :wincmd o<CR>    " only the current window
-nnoremap <leader>c :wincmd c<CR>    " close the current window
-nnoremap <leader>v :wincmd v<CR>    " vertical split window
-nnoremap <leader>s :wincmd s<CR>    " split window horizontal
-
-" nnoremap <Leader>+ :vertical resize +5<CR>
-" nnoremap <Leader>- :vertical resize -5<CR>
-nnoremap <Leader>rp :resize 100<CR>
-
-" Resize splits with arrow keys
-noremap <Leader><up> :res +5<CR>
-noremap <Leader><down> :res -5<CR>
-noremap <Leader><left> :vertical resize-5<CR>
-noremap <Leader><right> :vertical resize+5<CR>
-
-" nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
-
-" terminal mappings
-" To map <Esc> to exit terminal-mode:
-:tnoremap <Esc> <C-\><C-n>
-
-" To simulate |i_CTRL-R| in terminal-mode:
-:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-
-" To use `ALT+{h,j,k,l}` to navigate windows from any mode:
-:tnoremap <A-h> <C-\><C-N><C-w>h
-:tnoremap <A-j> <C-\><C-N><C-w>j
-:tnoremap <A-k> <C-\><C-N><C-w>k
-:tnoremap <A-l> <C-\><C-N><C-w>l
-:inoremap <A-h> <C-\><C-N><C-w>h
-:inoremap <A-j> <C-\><C-N><C-w>j
-:inoremap <A-k> <C-\><C-N><C-w>k
-:inoremap <A-l> <C-\><C-N><C-w>l
-:nnoremap <A-h> <C-w>h
-:nnoremap <A-j> <C-w>j
-:nnoremap <A-k> <C-w>k
-:nnoremap <A-l> <C-w>l
 
 " ==========
 " manage TODO
@@ -736,18 +868,6 @@ let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
 " =========
 " misc
 " =========
-inoremap <C-c> <esc>
-nnoremap <Leader><CR> :so $MYVIMRC<CR>
-
-" space space to switch buffer
-nnoremap <Leader><Space> <C-^>
-
-" quit insert mode
-inoremap jk <esc>
-inoremap kj <esc>
-
-" file explorer
-" nnoremap <leader>e <cmd>CHADopen<cr>
 
 " default file explorer
 let g:netrw_browse_split = 2    " open files in a new vertical split
@@ -762,23 +882,6 @@ nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
 " undo tree
 nnoremap <leader>u :UndotreeShow<CR>
 
-" move code block up and down in visual mode
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-
-" greatest remap ever
-vnoremap <leader>p "_dP
-
-" next greatest remap ever : asbjornHaland
-nnoremap <leader>y "+y
-vnoremap <leader>y "+y
-nnoremap <leader>Y gg"+yG
-
-" Open a new instance of st with the cwd
-nnoremap \t :tabe<CR>:-tabmove<CR>:term sh -c 'st'<CR><C-\><C-N>:q<CR>
-
-" Opening a terminal window
-noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
 
 " diff
 nmap <leader>gh :diffget //3<CR>
