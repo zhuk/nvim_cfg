@@ -458,8 +458,29 @@ let g:fzf_branch_actions = {
       \}
 
 set rtp+=/usr/local/opt/fzf
+
+" files
+nnoremap <leader>pf :Files<CR>
+nnoremap <leader>pp :CocCommand fzf-preview.ProjectFiles<CR>
+" git files
+" nnoremap <leader>pg :GFiles<CR>
+nnoremap <leader>pg :CocCommand fzf-preview.GitFiles<CR>
+" git modified files
+nnoremap <leader>pG :GFiles?<CR>
+" open buffers
+nnoremap <leader>pb :Buffers<CR>
+" commits
+nnoremap <leader>pc :Commits<CR>
+" file history
+nnoremap <leader>ph :History<CR>
+" command history
+nnoremap <leader>pH :History:<CR>
+" text Rg
+nnoremap <leader>ps :Rg<CR>
+" FZF
+nnoremap <leader>pz :FZF<CR>
+
 " nnoremap <leader>p :Leaderf file<CR>
-nnoremap <leader>p :Files<CR>
 " noremap <silent> <C-p> :Files<CR>
 " noremap <leader>fs :Rg<CR>
 " noremap <leader>fh :History<CR>
@@ -493,7 +514,7 @@ nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
-nnoremap <leader>fl <cmd>lua require('telescope.builtin').git_commits()<cr>
+nnoremap <leader>fc <cmd>lua require('telescope.builtin').git_commits()<cr>
 nnoremap <leader>ft <cmd>lua require('telescope.builtin').builtin()<cr>
 
 " nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
@@ -509,6 +530,14 @@ let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
 let g:floaterm_keymap_toggle = '<F12>'
+let g:floaterm_title=''
+
+let g:floaterm_gitcommit='floaterm'
+let g:floaterm_autoinsert=1
+let g:floaterm_width=0.8
+let g:floaterm_height=0.8
+let g:floaterm_wintitle=0
+let g:floaterm_autoclose=1
 
 " ===============================================
 " === coc.nvim
@@ -662,7 +691,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <leader>d  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <leader>dg  :<C-u>CocList diagnostics<cr>
 " " Manage extensions.
 " nnoremap <silent><nowait> <leader>e  :<C-u>CocList extensions<cr>
 " " Show commands.
@@ -680,70 +709,6 @@ nnoremap <silent><nowait> <leader>m  :<C-u>CocList -I symbols<cr>
 
 
 " ==========
-" LSP
-" ==========
-
-" lsp mappings
-" nnoremap <leader>va :lua vim.lsp.buf.definition()<CR>
-" nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
-" nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
-" nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
-" nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
-" nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
-" nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
-" nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
-" nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.show_line_diagnostics()<CR>
-
-" lsp config
-" let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-" lua require'lspconfig'.tsserver.setup{ on_attach=require'completion'.on_attach }
-" " lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
-" lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
-" " lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
-" lua require'lspconfig'.vimls.setup{ on_attach=require'completion'.on_attach }
-" " lua require'lspconfig'.sumneko_lua.setup{ on_attach=require'completion'.on_attach }
-" lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
-
-" " lua require'lspconfig'.jdtls.setup{ on_attach=require'completion'.on_attach }
-
-" lua << EOF
-" local util = require 'lspconfig/util'
-" require'lspconfig'.jdtls.setup{
-"   on_attach=require'completion'.on_attach;
-" --  log_level = vim.lsp.protocol.MessageType.Debug;
-"   root_dir = util.root_pattern('.git');
-"   init_options = {
-"     workspace = util.path.join { vim.loop.os_homedir(), "workspace" };
-"     jvm_args = {'-javaagent:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar',
-"                 '-Xbootclasspath/a:/home/zhux/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar'};
-"     os_config = nil;
-"   };
-" }
-" EOF
-
-" lua vim.lsp.set_log_level("debug")
-
-"map <c-p> to manually trigger completion
-" imap <silent> <c-p> <Plug>(completion_trigger)
-
-" possible value: 'UltiSnips', 'Neosnippet', 'vim-vsnip', 'snippets.nvim'
-" let g:completion_enable_snippet = 'UltiSnips'
-
-" fun! ThePrimeagen_LspHighlighter()
-"     lua print("Testing")
-"     lua package.loaded["my_lspconfig"] = nil
-"     lua require("my_lspconfig")
-" endfun
-
-" com! SetLspVirtualText call ThePrimeagen_LspHighlighter()
-
-" augroup auto_lsp_ext
-"     autocmd!
-"     autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
-" augroup END
-
-
-" ==========
 " vimspector settings
 " ==========
 
@@ -757,25 +722,25 @@ endfun
 " Debugger remaps
 nnoremap <leader>m :MaximizerToggle!<CR>
 nnoremap <leader>dd :call vimspector#Launch()<CR>
-nnoremap <leader>dc :call GotoWindow(g:vimspector_session_windows.code)<CR>
-nnoremap <leader>dt :call GotoWindow(g:vimspector_session_windows.tagpage)<CR>
-nnoremap <leader>dv :call GotoWindow(g:vimspector_session_windows.variables)<CR>
-nnoremap <leader>dw :call GotoWindow(g:vimspector_session_windows.watches)<CR>
-nnoremap <leader>ds :call GotoWindow(g:vimspector_session_windows.stack_trace)<CR>
-nnoremap <leader>do :call GotoWindow(g:vimspector_session_windows.output)<CR>
+nnoremap <leader>dwc :call GotoWindow(g:vimspector_session_windows.code)<CR>
+nnoremap <leader>dwt :call GotoWindow(g:vimspector_session_windows.tagpage)<CR>
+nnoremap <leader>dwv :call GotoWindow(g:vimspector_session_windows.variables)<CR>
+nnoremap <leader>dww :call GotoWindow(g:vimspector_session_windows.watches)<CR>
+nnoremap <leader>dws :call GotoWindow(g:vimspector_session_windows.stack_trace)<CR>
+nnoremap <leader>dwo :call GotoWindow(g:vimspector_session_windows.output)<CR>
 nnoremap <leader>de :call vimspector#Reset()<CR>
 
 nnoremap <leader>dtcb :call vimspector#CleanLineBreakpoint()<CR>
+nnoremap <leader>dC :call vimspector#Continue()<CR>
 
-nmap <leader>dl <Plug>VimspectorStepInto
-nmap <leader>dj <Plug>VimspectorStepOver
-nmap <leader>dk <Plug>VimspectorStepOut
-nmap <leader>d_ <Plug>VimspectorRestart
-nnoremap <leader>d<space> :call vimspector#Continue()<CR>
+nnoremap <leader>di <Plug>VimspectorStepInto
+nnoremap <leader>do <Plug>VimspectorStepOver
+nnoremap <leader>dO <Plug>VimspectorStepOut
+nnoremap <leader>dr <Plug>VimspectorRestart
 
-nmap <leader>drc <Plug>VimspectorRunToCursor
-nmap <leader>dbp <Plug>VimspectorToggleBreakpoint
-nmap <leader>dcbp <Plug>VimspectorToggleConditionalBreakpoint
+nnoremap <leader>dc <Plug>VimspectorRunToCursor
+nnoremap <leader>db <Plug>VimspectorToggleBreakpoint
+nnoremap <leader>dB <Plug>VimspectorToggleConditionalBreakpoint
 
 " <Plug>VimspectorStop
 " <Plug>VimspectorPause
@@ -877,7 +842,7 @@ let g:netrw_localrmdir='rm -r'
 let g:netrw_liststyle = 3
 
 " nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
+" nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
 
 " undo tree
 nnoremap <leader>u :UndotreeShow<CR>
