@@ -30,41 +30,42 @@ set relativenumber
 set hlsearch
 set incsearch
 set hidden
-set noerrorbells
-set tabstop=4 softtabstop=4
-set shiftwidth=4
-set expandtab
 set noswapfile
 set undodir=~/.vim/undodir
 set undofile
 set ignorecase
 set smartcase
-set termguicolors
 set scrolloff=8
 set signcolumn=yes
 set ttyfast "should make scrolling faster
 set lazyredraw "same as above
+set noerrorbells
 set visualbell
 
 set nowrap                              " Display long lines as just one line
 set whichwrap+=<,>,[,],h,l
 set encoding=utf-8                      " The encoding displayed
 set fileencoding=utf-8                  " The encoding written to file
-set ruler              			            " Show the cursor position all the time
+set ruler              			        " Show the cursor position all the time
 set pumheight=10                        " Makes popup menu smaller
 set cmdheight=2                         " More space for displaying messages
 set mouse=a                             " Enable your mouse
 set splitbelow                          " Horizontal splits will automatically be below
 set splitright                          " Vertical splits will automatically be to the right
 set t_Co=256                            " Support 256 colors
+set termguicolors
 set conceallevel=0                      " So that I can see `` in markdown files
 set smarttab                            " Makes tabbing smarter will realize you have 2 vs 4
 set expandtab                           " Converts tabs to spaces
+set showtabline=2                       " Always show tabs
+set tabstop=4
+set softtabstop=4
+set expandtab
+set shiftwidth=4
 set smartindent                         " Makes indenting smart
 set autoindent                          " Good auto indent
 set laststatus=2                        " Always display the status line
 set cursorline                          " Enable highlighting of the current line
-set showtabline=2                       " Always show tabs
 set noshowmode                          " We don't need to see things like -- INSERT -- anymore
 set nobackup                            " This is recommended by coc
 set nowritebackup                       " This is recommended by coc
@@ -72,7 +73,8 @@ set shortmess+=c                        " Don't pass messages to |ins-completion
 set signcolumn=yes                      " Always show the signcolumn, otherwise it would shift the text each time
 set updatetime=300                      " Faster completion
 "set timeoutlen=100                      " By default timeoutlen is 1000 ms
-set clipboard=unnamedplus               " Copy paste between vim and everything else
+" set clipboard=unnamedplus               " Copy paste between vim and everything else
+set colorcolumn=80
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -80,9 +82,6 @@ set updatetime=50
 
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noinsert,noselect
-
-set colorcolumn=80
-
 
 " ===============================================
 " Basic Key Mappings
@@ -224,6 +223,8 @@ noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
 " ===============================================
 call plug#begin('~/.config/nvim/autoload/plugged')
 
+" start page
+Plug 'mhinz/vim-startify'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -261,7 +262,6 @@ Plug 'mbbill/undotree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'stsewd/fzf-checkout.vim'
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 Plug 'kevinhwang91/rnvimr'
 
 Plug 'airblade/vim-rooter'
@@ -349,7 +349,7 @@ if (has("termguicolors"))
 endif
 
 " ===============================================
-" File manager, FZF, Leaderf
+" File manager, FZF
 " ===============================================
 
 " This is the default extra key bindings
@@ -365,19 +365,12 @@ let g:fzf_action = {
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_buffers_jump = 1
 
-" map <C-f> :Files<CR>
-" map <leader>b :Buffers<CR>
-" nnoremap <leader>g :Rg<CR>
-" nnoremap <leader>t :Tags<CR>
-" nnoremap <leader>m :Marks<CR>
-
 let g:fzf_tags_command = 'ctags -R'
 " Border color
 let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.9, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
 
 let $FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
 let $FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/**'"
-"-g '!{node_modules,.git}'
 
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
@@ -398,7 +391,6 @@ let g:fzf_colors =
 "Get Files
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--inline-info']}), <bang>0)
-
 
 " Get text in files with Rg
 " command! -bang -nargs=* Rg
@@ -479,34 +471,11 @@ nnoremap <leader>pH :History:<CR>
 nnoremap <leader>ps :Rg<CR>
 " FZF
 nnoremap <leader>pz :FZF<CR>
+" file explorer
+nnoremap <silent> <leader>e <cmd>CocCommand explorer<CR>
 
-" nnoremap <leader>p :Leaderf file<CR>
-" noremap <silent> <C-p> :Files<CR>
-" noremap <leader>fs :Rg<CR>
-" noremap <leader>fh :History<CR>
-" noremap <C-t> :BTags<CR>
-" noremap <silent> <C-l> :Lines<CR>
-" noremap <silent> <C-w> :Buffers<CR>
-" noremap <leader>; :History:<CR>
-
-let g:fzf_preview_window = 'right:60%'
+"let g:fzf_preview_window = 'right:60%'
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-
-
-" === Leaderf
-" let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_PreviewCode = 1
-let g:Lf_ShowHidden = 1
-let g:Lf_ShowDevIcons = 1
-let g:Lf_UseVersionControlTool = 0
-let g:Lf_IgnoreCurrentBufferName = 1
-let g:Lf_WildIgnore = {
-        \ 'dir': ['.git', 'vendor', 'node_modules'],
-        \ 'file': ['__vim_project_root']
-        \}
-let g:Lf_UseMemoryCache = 0
-let g:Lf_UseCache = 0
 
 " === telescope
 lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
@@ -517,15 +486,10 @@ nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 nnoremap <leader>fc <cmd>lua require('telescope.builtin').git_commits()<cr>
 nnoremap <leader>ft <cmd>lua require('telescope.builtin').builtin()<cr>
 
-" nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
-" nnoremap <leader>pw :lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-" nnoremap <leader>pb :lua require('telescope.builtin').buffers()<CR>
-" nnoremap <leader>vh :lua require('telescope.builtin').help_tags()<CR>
-" nnoremap <C-p> :lua require('telescope.builtin').git_files()<CR>
-" nnoremap <Leader>pg :lua require('telescope.builtin').git_files()<CR>
-" nnoremap <Leader>pf :lua require('telescope.builtin').find_files()<CR>
 
-" === float termal
+" ===============================================
+" === float terminal
+" ===============================================
 let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
@@ -539,14 +503,18 @@ let g:floaterm_height=0.8
 let g:floaterm_wintitle=0
 let g:floaterm_autoclose=1
 
+nnoremap <leader>; :FloatermNew --wintype=normal --height=6<cr>
+
 " ===============================================
 " === coc.nvim
 " ===============================================
 let g:coc_global_extensions = [
 \ 'coc-css',
+\ 'coc-cmake',
 \ 'coc-diagnostic',
 \ 'coc-explorer',
 \ 'coc-flutter-tools',
+\ 'coc-fzf-preview',
 \ 'coc-gitignore',
 \ 'coc-html',
 \ 'coc-json',
@@ -554,9 +522,10 @@ let g:coc_global_extensions = [
 \ 'coc-prettier',
 \ 'coc-pyright',
 \ 'coc-snippets',
-\ 'coc-sourcekit',
 \ 'coc-stylelint',
 \ 'coc-syntax',
+\ 'coc-sh',
+\ 'coc-sql',
 \ 'coc-tasks',
 \ 'coc-translator',
 \ 'coc-tslint-plugin',
@@ -605,8 +574,6 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
-nmap <silent> <leader>e <cmd>CocCommand explorer<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -711,7 +678,6 @@ nnoremap <silent><nowait> <leader>m  :<C-u>CocList -I symbols<cr>
 " ==========
 " vimspector settings
 " ==========
-
 " let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
 
 fun! GotoWindow(id)
@@ -746,9 +712,9 @@ nnoremap <leader>dB <Plug>VimspectorToggleConditionalBreakpoint
 " <Plug>VimspectorPause
 " <Plug>VimspectorAddFunctionBreakpoint
 
-" ===
+" ===============================================
 " === AutoFormat
-" ===
+" ===============================================
 augroup autoformat_settings
   " autocmd FileType bzl AutoFormatBuffer buildifier
   " autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
@@ -763,18 +729,18 @@ augroup autoformat_settings
   autocmd FileType vue AutoFormatBuffer prettier
 augroup END
 
-" ===
+" ===============================================
 " === vim-rooter
-" ===
+" ===============================================
 let g:rooter_patterns = ['__vim_project_root', '.git/']
 let g:rooter_silent_chdir = 1
 
 
-" ===
+" ===============================================
 " === Vista.vim
-" ===
+" ===============================================
 noremap <LEADER>vt :Vista!!<CR>
-noremap <c-t> :silent! Vista finder coc<CR>
+" noremap <c-t> :silent! Vista finder coc<CR>
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_default_executive = 'coc'
 let g:vista_fzf_preview = ['right:50%']
@@ -797,15 +763,16 @@ let g:scrollstatus_size = 15
 " ===
 let g:airline_powerline_fonts = 1
 
-"
-" ==========
+
+" ===============================================
 " git mappings
-" ==========
+" ===============================================
 nnoremap <leader>gc :GBranches<CR>
 nnoremap <leader>ga :Git fetch --all<CR>
 nnoremap <leader>grum :Git rebase upstream/master<CR>
 nnoremap <leader>grom :Git rebase origin/master<CR>
 nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>gs :G<CR>
 
 " git gutter
 let g:gitgutter_sign_allow_clobber = 0
@@ -822,18 +789,22 @@ nnoremap H :GitGutterPreviewHunk<CR>
 nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
 nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 
+" diff
+nmap <leader>gh :diffget //3<CR>
+nmap <leader>gu :diffget //2<CR>
 
-" ==========
+
+" ===============================================
 " manage TODO
-" ==========
+" ===============================================
 nmap <Leader>tu <Plug>BujoChecknormal
 nmap <Leader>th <Plug>BujoAddnormal
 let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
 
-" =========
-" misc
-" =========
 
+" ===============================================
+" misc
+" ===============================================
 " default file explorer
 let g:netrw_browse_split = 2    " open files in a new vertical split
 let g:netrw_banner = 0
@@ -847,11 +818,6 @@ let g:netrw_liststyle = 3
 " undo tree
 nnoremap <leader>u :UndotreeShow<CR>
 
-
-" diff
-nmap <leader>gh :diffget //3<CR>
-nmap <leader>gu :diffget //2<CR>
-nmap <leader>gs :G<CR>
 
 " insert code blocks
 " nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
@@ -878,13 +844,5 @@ augroup END
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
-augroup END
-
-augroup auto_fire_nvim
-    autocmd!
-    " Fire Neovim
-    " au BufEnter github.com_*.txt set filetype=markdown
-    " au BufEnter txti.es_*.txt set filetype=typescript
-    " au BufEnter stackoverflow_*.txt filetype=markdown
 augroup END
 
