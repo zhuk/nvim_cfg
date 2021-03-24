@@ -57,7 +57,7 @@ set termguicolors
 set conceallevel=0                      " So that I can see `` in markdown files
 set smarttab                            " Makes tabbing smarter will realize you have 2 vs 4
 set expandtab                           " Converts tabs to spaces
-set showtabline=2                       " Always show tabs
+"set showtabline=2                       " Always show tabs
 set tabstop=4
 set softtabstop=4
 set expandtab
@@ -215,8 +215,9 @@ nnoremap <leader>Y gg"+yG
 nnoremap \t :tabe<CR>:-tabmove<CR>:term sh -c 'st'<CR><C-\><C-N>:q<CR>
 
 " Opening a terminal window
-noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
+nnoremap <LEADER>/ <cmd>set splitright<CR>:vsplit<CR>:term<CR>
 
+nnoremap <leader>; <cmd>FloatermNew --wintype=normal --height=6<cr>
 
 " ===============================================
 " install plugins
@@ -494,7 +495,6 @@ let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
 let g:floaterm_keymap_toggle = '<F12>'
-let g:floaterm_title=''
 
 let g:floaterm_gitcommit='floaterm'
 let g:floaterm_autoinsert=1
@@ -503,7 +503,6 @@ let g:floaterm_height=0.8
 let g:floaterm_wintitle=0
 let g:floaterm_autoclose=1
 
-nnoremap <leader>; :FloatermNew --wintype=normal --height=6<cr>
 
 " ===============================================
 " === coc.nvim
