@@ -1,9 +1,5 @@
-" __  ____   __  _   ___     _____ __  __ ____   ____
-"|  \/  \ \ / / | \ | \ \   / /_ _|  \/  |  _ \ / ___|
-"| |\/| |\ V /  |  \| |\ \ / / | || |\/| | |_) | |
-"| |  | | | |   | |\  | \ V /  | || |  | |  _ <| |___
-"|_|  |_| |_|   |_| \_|  \_/  |___|_|  |_|_| \_\\____|
-
+"
+" NeoVim settings
 " Author: @zhuk
 
 " ===
@@ -222,7 +218,7 @@ nnoremap <Leader><Space> <C-^>
 " greatest remap ever
 " vnoremap <leader>p "_dP
 
-" next greatest remap ever : asbjornHaland
+" next greatest remap ever
 nnoremap <leader>y "+y
 vnoremap <leader>y "+y
 nnoremap <leader>Y gg"+yG
@@ -355,7 +351,7 @@ set background=dark
 colorscheme gruvbox
 " colorscheme deus PaperColor
 
-hi iCursor       guifg=none           guibg=green
+" hi iCursor       guifg=none           guibg=green
 
 set gcr+=i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150
 
